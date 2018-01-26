@@ -1,0 +1,142 @@
+syntax = "proto3";
+
+package prefab;
+
+option java_package = "cloud.prefab.domain";
+option java_outer_classname = "Prefab";
+
+
+service RateLimitService {
+    rpc LimitCheck (LimitRequest) returns (LimitResponse) {
+    };
+}
+
+service ConfigService {
+    rpc GetConfig (ConfigServicePointer) returns (stream ConfigDeltas) {
+    };
+    rpc Upsert (ConfigDelta) returns (ConfigServicePointer) {
+    };
+}
+
+message ConfigServicePointer {
+    int64 account_id = 1;
+    int64 start_at_id = 2;
+}
+message ConfigDelta {
+    int64 id = 2;
+    string key = 3;
+    ConfigValue value = 4;
+}
+
+message ConfigValue {
+    oneof type {
+        int64 int = 1;
+        string string = 2;
+        bytes bytes = 3;
+        double double = 4;
+        bool bool = 5;
+        FeatureFlag feature_flag = 6;
+    }
+}
+
+message ConfigDeltas {
+    repeated ConfigDelta deltas = 1;
+}
+
+message LimitResponse {
+    enum LimitPolicyNames {
+        NOT_SET = 0;
+        SECONDLY_ROLLING = 1;
+        MINUTELY_ROLLING = 3;
+        HOURLY_ROLLING = 5;
+        DAILY_ROLLING = 7;
+        MONTHLY_ROLLING = 8;
+        INFINITE = 9;
+        YEARLY_ROLLING = 10;
+    }
+
+    bool passed = 1;
+    int64 expires_at = 2; // for returnable: rtn this value
+    string enforced_group = 3; // events:pageview:homepage:123123
+    int64 current_bucket = 4;
+    string policy_group = 5; // events:pageview
+    LimitPolicyNames policy_name = 6;
+    int32 policy_limit = 7;
+    int64 amount = 8;
+    int64 limit_reset_at = 9;
+    LimitDefinition.SafetyLevel safety_level = 10;
+
+}
+
+message LimitRequest {
+    int64 account_id = 1;
+    int32 acquire_amount = 2;
+    repeated string groups = 3;
+
+    enum LimitCombiner {
+        NOT_SET = 0;
+        MINIMUM = 1;
+        MAXIMUM = 2;
+    }
+
+    LimitCombiner limit_combiner = 4;
+    bool allow_partial_response = 5;
+}
+
+message FeatureFlag {
+    string feature = 2;
+    double pct = 3;
+    repeated string whitelisted = 4;
+}
+
+message LimitDefinition {
+    enum SafetyLevel {
+        NOT_SET = 0;
+        L4_BEST_EFFORT = 4;
+        L5_BOMBPROOF = 5;
+    }
+
+    string group = 1;
+    LimitResponse.LimitPolicyNames policy_name = 2;
+    int32 limit = 3;
+    int32 burst = 4;
+    int64 account_id = 5;
+    int64 last_modified = 6;
+    bool returnable = 7;
+    SafetyLevel safety_level = 8; // [default = L4_BEST_EFFORT];
+}
+
+message LimitDefinitions {
+    repeated LimitDefinition definitions = 1;
+}
+
+enum OnFailure {
+    NOT_SET = 0;
+    LOG_AND_PASS = 1;
+    LOG_AND_FAIL = 2;
+    THROW = 3;
+}
+
+message FeatureFlags {
+    repeated FeatureFlag flags = 1;
+    int64 cache_expiry = 2;
+}
+
+message BufferedRequest {
+    int64 account_id = 1;
+    string method = 2;
+    string uri = 3;
+    string body = 4;
+    repeated string limit_groups = 5;
+    string content_type = 6;
+    bool fifo = 7;
+}
+message BatchRequest {
+    int64 account_id = 1;
+    string method = 2;
+    string uri = 3;
+    string body = 4;
+    repeated string limit_groups = 5;
+    string batch_template = 6;
+    string batch_separator = 7;
+}
