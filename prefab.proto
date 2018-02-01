@@ -90,7 +90,6 @@ message LimitRequest {
 }
 
 message FeatureFlag {
-    string feature = 2;
     double pct = 3;
     repeated string whitelisted = 4;
 }
