@@ -14,7 +14,7 @@ service RateLimitService {
 service ConfigService {
     rpc GetConfig (ConfigServicePointer) returns (stream ConfigDeltas) {
     };
-    rpc Upsert (ConfigDelta) returns (ConfigServicePointer) {
+    rpc Upsert (UpsertRequest) returns (ConfigServicePointer) {
     };
 }
 
@@ -41,6 +41,12 @@ message ConfigValue {
 
 message ConfigDeltas {
     repeated ConfigDelta deltas = 1;
+}
+
+message UpsertRequest {
+    int64 account_id = 1;
+    ConfigDelta config_delta = 2;
+    string previous_key = 3;
 }
 
 message LimitResponse {
