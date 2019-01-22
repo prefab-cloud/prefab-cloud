@@ -14,6 +14,8 @@ service RateLimitService {
 service ConfigService {
     rpc GetConfig (ConfigServicePointer) returns (stream ConfigDeltas) {
     };
+    rpc GetAllConfig (ConfigServicePointer) returns (ConfigDeltas) {
+    };
     rpc Upsert (UpsertRequest) returns (ConfigServicePointer) {
     };
 }
@@ -36,6 +38,7 @@ message ConfigValue {
         double double = 4;
         bool bool = 5;
         FeatureFlag feature_flag = 6;
+        LimitDefinition limit_definition = 7;
     }
 }
 
@@ -46,7 +49,7 @@ message ConfigDeltas {
 message UpsertRequest {
     int64 account_id = 1;
     ConfigDelta config_delta = 2;
-    string previous_key = 3;
+    string changed_by = 4;
 }
 
 message LimitResponse {
@@ -87,6 +90,7 @@ message LimitRequest {
 
     LimitCombiner limit_combiner = 4;
     bool allow_partial_response = 5;
+    LimitDefinition.SafetyLevel safety_level = 6; // [default = L4_BEST_EFFORT];
 }
 
 message FeatureFlag {
@@ -101,14 +105,13 @@ message LimitDefinition {
         L5_BOMBPROOF = 5;
     }
 
-    string group = 1;
     LimitResponse.LimitPolicyNames policy_name = 2;
     int32 limit = 3;
     int32 burst = 4;
     int64 account_id = 5;
     int64 last_modified = 6;
     bool returnable = 7;
-    SafetyLevel safety_level = 8; // [default = L4_BEST_EFFORT];
+    SafetyLevel safety_level = 8; // [default = L4_BEST_EFFORT]; // Overridable by request
 }
 
 message LimitDefinitions {
@@ -144,4 +147,7 @@ message BatchRequest {
     repeated string limit_groups = 5;
     string batch_template = 6;
     string batch_separator = 7;
+}
+message BasicResponse {
+    string message = 1;
 }
