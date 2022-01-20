@@ -24,11 +24,6 @@ message ConfigServicePointer {
     int64 account_id = 1;
     int64 start_at_id = 2;
 }
-message ConfigDelta {
-    int64 id = 2;
-    string key = 3;
-    ConfigValue value = 4;
-}
 
 message ConfigValue {
     oneof type {
@@ -41,15 +36,30 @@ message ConfigValue {
         LimitDefinition limit_definition = 7;
     }
 }
+message NamespaceValue {
+  string namespace = 1;
+  ConfigValue config_value = 2;
+}
+message EnvironmentValues {
+  string environment = 1;
+  repeated NamespaceValue namespace_value = 2;
+  ConfigValue default = 3;
+}
+message ConfigDelta {
+  int64 id = 1;
+  string key = 2;
+  ConfigValue default = 3; // this implies our config type
+  repeated EnvironmentValues envs = 4;
+}
 
 message ConfigDeltas {
     repeated ConfigDelta deltas = 1;
 }
 
 message UpsertRequest {
-    int64 account_id = 1;
-    ConfigDelta config_delta = 2;
-    string changed_by = 4;
+  int64 project_id = 1;
+  ConfigDelta config_delta = 2;
+  string changed_by = 4;
 }
 
 message LimitResponse {
@@ -93,9 +103,64 @@ message LimitRequest {
     LimitDefinition.SafetyLevel safety_level = 6; // [default = L4_BEST_EFFORT];
 }
 
+message FeatureFlagVariant {
+  oneof type {
+    int64 int = 1;
+    string string = 2;
+    double double = 3;
+    bool bool = 4;
+  }
+}
+
+message Criteria {
+  enum CriteriaOperator {
+    NOT_SET = 0;
+    IN = 1;
+    NOT_IN = 2;
+    EQ = 3;
+  }
+  string property = 1;
+  CriteriaOperator operator = 2;
+  repeated string values = 3;  // ok to be string here?
+}
+
+message Rule {
+  Criteria criteria = 1;
+  VariantDistribution distribution = 2;
+}
+
+message Segment {
+  string key = 1;
+  repeated string includes = 2;
+  repeated string excludes = 3;
+  repeated Criteria criterion = 4;
+}
+message UserTarget {
+  FeatureFlagVariant variant = 1;
+  repeated string identifiers = 2;
+}
+
+message VariantWeight {
+  int32 weight = 1;
+  FeatureFlagVariant variant = 2;
+}
+
+message VariantWeights {
+  repeated VariantWeight variant_weight = 1;
+}
+
+message VariantDistribution {
+  oneof type {
+    FeatureFlagVariant variant = 1;
+    VariantWeights variant_weights = 2;
+  }
+}
 message FeatureFlag {
-    double pct = 3;
-    repeated string whitelisted = 4;
+  bool active = 1;
+  FeatureFlagVariant inactive_value = 2;
+  VariantDistribution default = 3;
+  repeated UserTarget user_targets = 4;
+  repeated Rule rules = 5;
 }
 
 message LimitDefinition {
@@ -123,11 +188,6 @@ enum OnFailure {
     LOG_AND_PASS = 1;
     LOG_AND_FAIL = 2;
     THROW = 3;
-}
-
-message FeatureFlags {
-    repeated FeatureFlag flags = 1;
-    int64 cache_expiry = 2;
 }
 
 message BufferedRequest {
