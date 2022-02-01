@@ -42,7 +42,7 @@ message NamespaceValue {
 }
 message EnvironmentValues {
   string environment = 1;
-  repeated NamespaceValue namespace_value = 2;
+  repeated NamespaceValue namespace_values = 2;
   ConfigValue default = 3;
 }
 message ConfigDelta {
@@ -141,12 +141,12 @@ message UserTarget {
 }
 
 message VariantWeight {
-  int32 weight = 1;
+  int32 weight = 1;  // out of 1000
   FeatureFlagVariant variant = 2;
 }
 
 message VariantWeights {
-  repeated VariantWeight variant_weight = 1;
+  repeated VariantWeight weights = 1;
 }
 
 message VariantDistribution {
