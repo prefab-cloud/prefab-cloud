@@ -34,6 +34,7 @@ message ConfigValue {
     bool bool = 5;
     FeatureFlag feature_flag = 6;
     LimitDefinition limit_definition = 7;
+    Segment segment = 8;
   }
 }
 message NamespaceValue {
@@ -120,6 +121,8 @@ message Criteria {
     IN = 1;
     NOT_IN = 2;
     EQ = 3;
+    IN_SEG = 4;
+    NOT_IN_SEG = 5;
   }
   string property = 1;
   CriteriaOperator operator = 2;
@@ -132,10 +135,11 @@ message Rule {
 }
 
 message Segment {
-  string key = 1;
-  repeated string includes = 2;
-  repeated string excludes = 3;
-  repeated Criteria criterion = 4;
+  string name = 1;
+  string description = 2;
+  repeated string includes = 3;
+  repeated string excludes = 4;
+  repeated Criteria criterion = 5;
 }
 message UserTarget {
   int32 variant_idx = 1;
