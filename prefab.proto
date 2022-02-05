@@ -110,6 +110,8 @@ message FeatureFlagVariant {
     double double = 3;
     bool bool = 4;
   }
+  string name = 5;
+  string description = 6;
 }
 
 message Criteria {
@@ -136,13 +138,13 @@ message Segment {
   repeated Criteria criterion = 4;
 }
 message UserTarget {
-  FeatureFlagVariant variant = 1;
+  int32 variant_idx = 1;
   repeated string identifiers = 2;
 }
 
 message VariantWeight {
   int32 weight = 1;  // out of 1000
-  FeatureFlagVariant variant = 2;
+  int32 variant_idx = 2;
 }
 
 message VariantWeights {
@@ -151,16 +153,17 @@ message VariantWeights {
 
 message VariantDistribution {
   oneof type {
-    FeatureFlagVariant variant = 1;
+    int32 variant_idx = 1;
     VariantWeights variant_weights = 2;
   }
 }
 message FeatureFlag {
   bool active = 1;
-  FeatureFlagVariant inactive_value = 2;
+  int32 inactive_variant_idx = 2;
   VariantDistribution default = 3;
   repeated UserTarget user_targets = 4;
   repeated Rule rules = 5;
+  repeated FeatureFlagVariant variants = 6;
 }
 
 message LimitDefinition {
