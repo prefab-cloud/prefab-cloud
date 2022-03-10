@@ -12,11 +12,11 @@ service RateLimitService {
 }
 
 service ConfigService {
-  rpc GetConfig (ConfigServicePointer) returns (stream ConfigDeltas) {
+  rpc GetConfig (ConfigServicePointer) returns (stream Configs) {
   };
-  rpc GetAllConfig (ConfigServicePointer) returns (ConfigDeltas) {
+  rpc GetAllConfig (ConfigServicePointer) returns (Configs) {
   };
-  rpc Upsert (UpsertRequest) returns (ConfigServicePointer) {
+  rpc Upsert (Config) returns (CreationResponse) {
   };
 }
 
@@ -38,30 +38,24 @@ message ConfigValue {
     Segment segment = 8;
   }
 }
-message NamespaceValue {
-  string namespace = 1;
-  ConfigValue config_value = 2;
+
+message Configs {
+  repeated Config configs = 1;
 }
-message EnvironmentValues {
-  string environment = 1;
-  repeated NamespaceValue namespace_values = 2;
-  ConfigValue default = 3;
-}
-message ConfigDelta {
+
+message Config {
   int64 id = 1;
-  string key = 2;
-  ConfigValue default = 3; // this implies our config type
-  repeated EnvironmentValues envs = 4;
-}
-
-message ConfigDeltas {
-  repeated ConfigDelta deltas = 1;
-}
-
-message UpsertRequest {
-  int64 project_id = 1;
-  ConfigDelta config_delta = 2;
+  int64 project_id = 2;
+  string key = 3;
   string changed_by = 4;
+  repeated ConfigRow rows = 5;
+  repeated FeatureFlagVariant variants = 6;
+}
+
+message ConfigRow {
+  string env_key = 1;
+  string namespace = 2;
+  ConfigValue value = 3;
 }
 
 message LimitResponse {
@@ -168,7 +162,6 @@ message FeatureFlag {
   VariantDistribution default = 3;
   repeated UserTarget user_targets = 4;
   repeated Rule rules = 5;
-  repeated FeatureFlagVariant variants = 6;
 }
 
 message LimitDefinition {
@@ -218,4 +211,8 @@ message BatchRequest {
 }
 message BasicResponse {
   string message = 1;
+}
+message CreationResponse {
+  string message = 1;
+  int64 new_id = 2;
 }
