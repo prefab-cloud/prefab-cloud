@@ -20,10 +20,15 @@ service ConfigService {
   };
 }
 
+service IdService {
+  rpc GetBlock (IdBlockRequest) returns (IdBlock) {
+  };
+}
+
 message ConfigServicePointer {
   int64 project_id = 1;
   int64 start_at_id = 2;
-  string env_key = 3;
+  int64 project_env_id = 3;
 }
 
 message ConfigValue {
@@ -53,7 +58,7 @@ message Config {
 }
 
 message ConfigRow {
-  string env_key = 1;
+  int64 project_env_id = 1;
   string namespace = 2;
   ConfigValue value = 3;
 }
@@ -215,4 +220,19 @@ message BasicResponse {
 message CreationResponse {
   string message = 1;
   int64 new_id = 2;
+}
+
+message IdBlock {
+  int64 project_id = 1;
+  int64 project_env_id = 2;
+  string sequence_name = 3;
+  int64 start = 4;
+  int64 end = 5;
+}
+
+message IdBlockRequest {
+  int64 project_id = 1;
+  int64 project_env_id = 2;
+  string sequence_name = 3;
+  int64 size = 4;
 }
