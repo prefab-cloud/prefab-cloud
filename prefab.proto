@@ -123,6 +123,7 @@ message Criteria {
     EQ = 3;
     IN_SEG = 4;
     NOT_IN_SEG = 5;
+    ALWAYS_TRUE = 6;
   }
   string property = 1;
   CriteriaOperator operator = 2;
@@ -131,7 +132,7 @@ message Criteria {
 
 message Rule {
   Criteria criteria = 1;
-  VariantDistribution distribution = 2;
+  repeated VariantWeight variant_weights = 2;
 }
 
 message Segment {
@@ -151,20 +152,9 @@ message VariantWeight {
   int32 variant_idx = 2;
 }
 
-message VariantWeights {
-  repeated VariantWeight weights = 1;
-}
-
-message VariantDistribution {
-  oneof type {
-    int32 variant_idx = 1;
-    VariantWeights variant_weights = 2;
-  }
-}
 message FeatureFlag {
   bool active = 1;
   int32 inactive_variant_idx = 2;
-  VariantDistribution default = 3;
   repeated UserTarget user_targets = 4;
   repeated Rule rules = 5;
 }
