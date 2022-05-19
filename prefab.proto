@@ -46,6 +46,7 @@ message ConfigValue {
 
 message Configs {
   repeated Config configs = 1;
+  ConfigServicePointer config_service_pointer = 2;
 }
 
 message Config {
@@ -105,25 +106,28 @@ message LimitRequest {
 }
 
 message FeatureFlagVariant {
-  oneof type {
-    int64 int = 1;
-    string string = 2;
-    double double = 3;
-    bool bool = 4;
-  }
+
+  optional int64 int = 1;
+  optional string string = 2;
+  optional double double = 3;
+  optional bool bool = 4;
+
   string name = 5;
   string description = 6;
 }
 
 message Criteria {
   enum CriteriaOperator {
-    NOT_SET = 0;
-    IN = 1;
-    NOT_IN = 2;
-    EQ = 3;
-    IN_SEG = 4;
-    NOT_IN_SEG = 5;
-    ALWAYS_TRUE = 6;
+    NOT_SET = 0; // proto null
+    LOOKUP_KEY_IN = 1;
+    LOOKUP_KEY_NOT_IN = 2;
+    IN_SEG = 3;
+    NOT_IN_SEG = 4;
+    ALWAYS_TRUE = 5;
+    PROP_IS_ONE_OF = 6;
+    PROP_IS_NOT_ONE_OF = 7;
+    PROP_ENDS_WITH_ONE_OF = 8;
+    PROP_DOES_NOT_END_WITH_ONE_OF = 9;
   }
   string property = 1;
   CriteriaOperator operator = 2;
@@ -136,15 +140,7 @@ message Rule {
 }
 
 message Segment {
-  string name = 1;
-  string description = 2;
-  repeated string includes = 3;
-  repeated string excludes = 4;
-  repeated Criteria criterion = 5;
-}
-message UserTarget {
-  int32 variant_idx = 1;
-  repeated string identifiers = 2;
+  repeated Criteria criterion = 1;
 }
 
 message VariantWeight {
@@ -155,7 +151,6 @@ message VariantWeight {
 message FeatureFlag {
   bool active = 1;
   int32 inactive_variant_idx = 2;
-  repeated UserTarget user_targets = 4;
   repeated Rule rules = 5;
 }
 
