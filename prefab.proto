@@ -154,6 +154,27 @@ message FeatureFlag {
   repeated Rule rules = 5;
 }
 
+
+service ClientService {
+  rpc GetAll (Identity) returns (ConfigEvaluations) {
+  };
+}
+
+message Identity {
+  optional string lookup = 1;
+  map<string, string> attributes = 2;
+}
+
+message ClientConfigValue {
+  optional int64 int = 1;
+  optional string string = 2;
+  optional double double = 3;
+  optional bool bool = 4;
+}
+message ConfigEvaluations {
+  map<string, ClientConfigValue> values = 1;
+}
+
 message LimitDefinition {
   enum SafetyLevel {
     NOT_SET = 0;
