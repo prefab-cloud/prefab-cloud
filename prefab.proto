@@ -41,6 +41,7 @@ message ConfigValue {
     FeatureFlag feature_flag = 6;
     LimitDefinition limit_definition = 7;
     Segment segment = 8;
+    LogLevel log_level = 9;
   }
 }
 
@@ -63,6 +64,20 @@ message ConfigRow {
   string namespace = 2;
   ConfigValue value = 3;
 }
+
+enum LogLevel {
+  NOT_SET_LOG_LEVEL = 0;
+  TRACE = 1;
+  DEBUG = 2;
+  INFO = 3;
+  // NOTICE = 4;
+  WARN = 5;
+  ERROR = 6;
+  // CRITICAL = 7;
+  // ALERT = 8;
+  FATAL = 9;
+}
+
 
 message LimitResponse {
   enum LimitPolicyNames {
