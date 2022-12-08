@@ -31,6 +31,22 @@ message ConfigServicePointer {
   int64 project_env_id = 3;
 }
 
+// Issues
+// 1. Env and Namespace feels like not enough granularity. Great use cases to support config by: AZ, Region, State, Deployment, SingleTenant
+// 2. Timed LogLevel isn't supported, but it feels like a rule. "Set to Debug if time within 30minutes of 8am"
+// 3. LogLevel debug for only certain user IDs. Feels like a rule "debug if userId in [] but that's not supported
+// 4. FeatureFlags have a decent amount of "specialness"
+// 5. BigSegment's not supported.
+
+// Changes
+// 1. Env & namespace are just rules
+// 2. Matching rules serve a ConfigValue
+// 3. A ConfigValue can be a Weighted set of ConfigValues
+// 4. A ConfigValue can be a pointer to another config value
+// 5. ConfigRows can have "properties" set eg "active". This would be appended to user supplied.
+// 6. Configs can have "allowable configs" which constrains the values that can be returned
+// 7. An idea for BigSegments.
+
 message ConfigValue {
   oneof type {
     int64 int = 1;
@@ -38,12 +54,30 @@ message ConfigValue {
     bytes bytes = 3;
     double double = 4;
     bool bool = 5;
-    FeatureFlag feature_flag = 6;
+    WeightedValues weighted_values = 6;
     LimitDefinition limit_definition = 7;
     Segment segment = 8;
     LogLevel log_level = 9;
+    string config_value = 10; // pointer
+    IntList int_list = 11;
+    BigIntList big_int_list = 12;  // lazily loaded. supported incremental updates
   }
 }
+message IntList {
+  repeated int64 int_list = 1;
+}
+message BigIntList {
+  IntList int_list = 1; // lazily loaded
+}
+
+message WeightedValue {
+  int32 weight = 1;  // out of 1000
+  ConfigValue value = 2;
+}
+message WeightedValues {
+  repeated WeightedValue weighted_values = 1;
+}
+
 
 message Configs {
   repeated Config configs = 1;
@@ -56,13 +90,16 @@ message Config {
   string key = 3;
   string changed_by = 4;
   repeated ConfigRow rows = 5;
-  repeated FeatureFlagVariant variants = 6;
+  repeated ConfigValue allowable_values = 6;
 }
 
 message ConfigRow {
-  int64 project_env_id = 1;
-  string namespace = 2;
-  ConfigValue value = 3;
+  repeated RulesAndValue rules_and_values = 1;
+  map<string, ConfigValue> properties = 2;
+}
+
+message RulesAndValue {
+  repeated Rule rules = 1;
 }
 
 enum LogLevel {
@@ -120,17 +157,6 @@ message LimitRequest {
   LimitDefinition.SafetyLevel safety_level = 6; // [default = L4_BEST_EFFORT];
 }
 
-message FeatureFlagVariant {
-
-  optional int64 int = 1;
-  optional string string = 2;
-  optional double double = 3;
-  optional bool bool = 4;
-
-  string name = 5;
-  string description = 6;
-}
-
 message Criteria {
   enum CriteriaOperator {
     NOT_SET = 0; // proto null
@@ -143,32 +169,21 @@ message Criteria {
     PROP_IS_NOT_ONE_OF = 7;
     PROP_ENDS_WITH_ONE_OF = 8;
     PROP_DOES_NOT_END_WITH_ONE_OF = 9;
+    HIERARCHICAL_MATCH = 10;
   }
-  string property = 1;
+  string property_name = 1;
   CriteriaOperator operator = 2;
-  repeated string values = 3;  // ok to be string here?
+  ConfigValue value_to_match = 3;
 }
 
 message Rule {
-  Criteria criteria = 1;
-  repeated VariantWeight variant_weights = 2;
+  repeated Criteria criterias = 1;
+  ConfigValue value_on_match = 2;
 }
 
 message Segment {
   repeated Criteria criterion = 1;
 }
-
-message VariantWeight {
-  int32 weight = 1;  // out of 1000
-  int32 variant_idx = 2;
-}
-
-message FeatureFlag {
-  bool active = 1;
-  int32 inactive_variant_idx = 2;
-  repeated Rule rules = 5;
-}
-
 
 service ClientService {
   rpc GetAll (Identity) returns (ConfigEvaluations) {
