@@ -5,7 +5,6 @@ package prefab;
 option java_package = "cloud.prefab.domain";
 option java_outer_classname = "Prefab";
 
-
 service RateLimitService {
   rpc LimitCheck (LimitRequest) returns (LimitResponse) {
   };
@@ -31,22 +30,6 @@ message ConfigServicePointer {
   int64 project_env_id = 3;
 }
 
-// Issues
-// 1. Env and Namespace feels like not enough granularity. Great use cases to support config by: AZ, Region, State, Deployment, SingleTenant
-// 2. Timed LogLevel isn't supported, but it feels like a rule. "Set to Debug if time within 30minutes of 8am"
-// 3. LogLevel debug for only certain user IDs. Feels like a rule "debug if userId in [] but that's not supported
-// 4. FeatureFlags have a decent amount of "specialness"
-// 5. BigSegment's not supported.
-
-// Changes
-// 1. Env & namespace are just rules
-// 2. Matching rules serve a ConfigValue
-// 3. A ConfigValue can be a Weighted set of ConfigValues
-// 4. A ConfigValue can be a pointer to another config value
-// 5. ConfigRows can have "properties" set eg "active". This would be appended to user supplied.
-// 6. Configs can have "allowable configs" which constrains the values that can be returned
-// 7. An idea for BigSegments.
-
 message ConfigValue {
   oneof type {
     int64 int = 1;
@@ -58,26 +41,17 @@ message ConfigValue {
     LimitDefinition limit_definition = 7;
     Segment segment = 8;
     LogLevel log_level = 9;
-    string config_value = 10; // pointer
-    IntList int_list = 11;
-    BigIntList big_int_list = 12;  // lazily loaded. supported incremental updates
   }
-}
-message IntList {
-  repeated int64 int_list = 1;
-}
-message BigIntList {
-  IntList int_list = 1; // lazily loaded
 }
 
 message WeightedValue {
   int32 weight = 1;  // out of 1000
   ConfigValue value = 2;
 }
+
 message WeightedValues {
   repeated WeightedValue weighted_values = 1;
 }
-
 
 message Configs {
   repeated Config configs = 1;
@@ -88,18 +62,24 @@ message Config {
   int64 id = 1;
   int64 project_id = 2;
   string key = 3;
-  string changed_by = 4;
+  ChangedBy changed_by = 4;
   repeated ConfigRow rows = 5;
   repeated ConfigValue allowable_values = 6;
 }
 
-message ConfigRow {
-  repeated RulesAndValue rules_and_values = 1;
-  map<string, ConfigValue> properties = 2;
+message ChangedBy {
+  int64 user_id = 1;
+  string email = 2;
 }
 
-message RulesAndValue {
-  repeated Rule rules = 1;
+message ConfigRow {
+  repeated ConditionalValue values = 1;
+  map<string, ConfigValue> properties = 2; // can store "activated"
+}
+
+message ConditionalValue {
+  repeated Criterion criteria = 1; // if all criteria match, then the rule is matched and value is returned
+  ConfigValue value = 2;
 }
 
 enum LogLevel {
@@ -157,7 +137,7 @@ message LimitRequest {
   LimitDefinition.SafetyLevel safety_level = 6; // [default = L4_BEST_EFFORT];
 }
 
-message Criteria {
+message Criterion {
   enum CriteriaOperator {
     NOT_SET = 0; // proto null
     LOOKUP_KEY_IN = 1;
@@ -176,13 +156,9 @@ message Criteria {
   ConfigValue value_to_match = 3;
 }
 
-message Rule {
-  repeated Criteria criterias = 1;
-  ConfigValue value_on_match = 2;
-}
 
 message Segment {
-  repeated Criteria criterion = 1;
+  repeated Criterion criterion = 1;
 }
 
 service ClientService {

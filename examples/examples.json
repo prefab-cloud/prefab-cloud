@@ -2,11 +2,13 @@
   {
     "key": "basic-string",
     "config_rows": [
-
       {
-        "rules_and_values": [
+        "values": [
           {
-            "criterias": [
+            "value": {
+              "string": "namespaced-staging-value"
+            },
+            "criteria": [
               {
                 "propertyName": "env",
                 "operator": "EQ",
@@ -21,36 +23,13 @@
                   "string": "users.cron"
                 }
               }
-            ],
-            "value_on_match": {
-              "string": "namespaced-staging-value"
-            }
+            ]
           },
           {
-            "criterias": [
-              {
-                "propertyName": "env",
-                "operator": "EQ",
-                "valueToMatch": {
-                  "string": "staging"
-                }
-              }
-            ],
-            "value_on_match": {
+            "value": {
               "string": "staging-value"
-            }
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "key": "set-of-ids",
-    "config_rows": [
-      {
-        "rules_and_values": [
-          {
-            "criterias": [
+            },
+            "criteria": [
               {
                 "propertyName": "env",
                 "operator": "EQ",
@@ -58,177 +37,191 @@
                   "string": "staging"
                 }
               }
-            ],
-            "value_on_match": {
-              "set_integer": [
-                1,
-                2,
-                3
-              ]
-            }
+            ]
           }
         ]
-      }
-    ]
-  },
-  {
-    "key": "log-level",
-    "config_rows": [
-      {
-        "rules_and_values": [
-          {
-            "criterias": [
-              {
-                "propertyName": "env",
-                "operator": "EQ",
-                "valueToMatch": {
-                  "string": "staging"
-                }
-              },
-              {
-                "propertyName": "currentTime",
-                "operator": "LESS_THAN",
-                "valueToMatch": {
-                  "int": 123123123,
-                  "comment": "this is 30 min after we set it"
-                }
-              },
-              {
-                "propertyName": "attributes[user_id]",
-                "operator": "IN_SET",
-                "valueToMatch": {
-                  "config_value": "set-of-ids",
-                  "comment": "this is a pointer to another config value"
-                }
-              }
-            ],
-            "value_on_match": {
-              "log_level": "DEBUG"
-            }
-          },
-          {
-            "criterias": [
-              {
-                "propertyName": "env",
-                "operator": "EQ",
-                "valueToMatch": {
-                  "string": "staging"
-                }
-              }
-            ],
-            "value_on_match": {
-              "log_level": "WARN"
-            }
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "key": "feature-flag",
-    "allowed_values": [
-      {
-        "string": "treatment"
       },
       {
-        "string": "control"
-      }
-    ],
-    "config_rows": [
-      {
-        "properties": {
-          "active": true
-        },
-        "rules_and_values": [
+        "key": "set-of-ids",
+        "config_rows": [
           {
-            "criterias": [
-              {
-                "propertyName": "env",
-                "operator": "EQ",
-                "valueToMatch": {
-                  "string": "staging"
-                }
+            "values": {
+              "value": {
+                "set_integer": [
+                  1,
+                  2,
+                  3
+                ]
               },
-              {
-                "propertyName": "active",
-                "operator": "EQ",
-                "valueToMatch": {
-                  "boolean": true
-                }
-              },
-              {
-                "propertyName": "email",
-                "operator": "ENDS_WITH",
-                "value": "example.com"
-              }
-            ],
-            "value_on_match": {
-              "weighted": [
+              "criteria": [
                 {
-                  "variant": {
-                    "string": "treatment"
-                  },
-                  "weight": 0.5
-                },
-                {
-                  "variant": {
-                    "string": "control"
-                  },
-                  "weight": 0.5
+                  "propertyName": "env",
+                  "operator": "EQ",
+                  "valueToMatch": {
+                    "string": "staging"
+                  }
                 }
               ]
             }
           },
           {
-            "criterias": [
+            "key": "log-level",
+            "config_rows": [
               {
-                "propertyName": "env",
-                "operator": "EQ",
-                "valueToMatch": {
-                  "string": "staging"
+                "values": {
+                  "value": {
+                    "log_level": "DEBUG"
+                  },
+                  "criteria": [
+                    {
+                      "propertyName": "env",
+                      "operator": "EQ",
+                      "valueToMatch": {
+                        "string": "staging"
+                      }
+                    },
+                    {
+                      "propertyName": "currentTime",
+                      "operator": "LESS_THAN",
+                      "valueToMatch": {
+                        "int": 123123123,
+                        "comment": "this is 30 min after we set it"
+                      }
+                    },
+                    {
+                      "propertyName": "attributes[user_id]",
+                      "operator": "IN_SET",
+                      "valueToMatch": {
+                        "config_value": "set-of-ids",
+                        "comment": "this is a pointer to another config value"
+                      }
+                    }
+                  ]
                 }
               },
               {
-                "propertyName": "active",
-                "operator": "EQ",
-                "valueToMatch": {
-                  "boolean": false
+                "values": {
+                  "value": {
+                    "log_level": "WARN"
+                  },
+                  "criteria": [
+                    {
+                      "propertyName": "env",
+                      "operator": "EQ",
+                      "valueToMatch": {
+                        "string": "staging"
+                      }
+                    }
+                  ]
                 }
               }
-            ],
-            "value_on_match": {
-              "string": "control"
-            }
+            ]
           },
           {
-            "criterias": [
+            "key": "feature-flag",
+            "allowable_values": [
               {
-                "propertyName": "env",
-                "operator": "EQ",
-                "valueToMatch": {
-                  "string": "staging"
-                }
+                "string": "treatment"
               },
               {
-                "propertyName": "active",
-                "operator": "EQ",
-                "valueToMatch": {
-                  "boolean": true
-                }
-              },
-              {
-                "operator": "IN_SEGMENT",
-                "valueToMatch": {
-                  "config_value": "alpha-customer-segment"
-                }
+                "string": "control"
               }
             ],
-            "value_on_match": {
-              "string": "alpha-treatment"
-            }
+            "config_rows": [
+              {
+                "properties": {
+                  "active": true
+                },
+                "values": {
+                  "value": {
+                    "weighted": [
+                      {
+                        "variant": {
+                          "string": "treatment"
+                        },
+                        "weight": 0.5
+                      },
+                      {
+                        "variant": {
+                          "string": "control"
+                        },
+                        "weight": 0.5
+                      }
+                    ]
+                  },
+                  "criteria": [
+                    {
+                      "propertyName": "env",
+                      "operator": "EQ",
+                      "valueToMatch": {
+                        "string": "staging"
+                      }
+                    },
+                    {
+                      "propertyName": "active",
+                      "operator": "EQ",
+                      "valueToMatch": {
+                        "boolean": true
+                      }
+                    },
+                    {
+                      "propertyName": "email",
+                      "operator": "ENDS_WITH",
+                      "value": "example.com"
+                    }
+                  ]
+
+                }
+              {
+                "value": {
+                  "string": "control"
+                },
+                "criteria": [
+                  {
+                    "propertyName": "env",
+                    "operator": "EQ",
+                    "valueToMatch": {
+                      "string": "staging"
+                    }
+                  },
+                  {
+                    "propertyName": "active",
+                    "operator": "EQ",
+                    "valueToMatch": {
+                      "boolean": false
+                    }
+                  }
+                ]
+              },
+              {
+                "value": {
+                  "string": "alpha-treatment"
+                },
+                "criteria": [
+                  {
+                    "propertyName": "env",
+                    "operator": "EQ",
+                    "valueToMatch": {
+                      "string": "staging"
+                    }
+                  },
+                  {
+                    "propertyName": "active",
+                    "operator": "EQ",
+                    "valueToMatch": {
+                      "boolean": true
+                    }
+                  },
+                  {
+                    "operator": "IN_SEGMENT",
+                    "valueToMatch": {
+                      "config_value": "alpha-customer-segment"
+                    }
+                  }
+                ]
+              }
+            ]
           }
         ]
       }
     ]
-  }
-]
