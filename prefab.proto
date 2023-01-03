@@ -158,7 +158,7 @@ message Criterion {
 
 
 message Segment {
-  repeated Criterion criterion = 1;
+  repeated Criterion criteria = 1;
 }
 
 service ClientService {
