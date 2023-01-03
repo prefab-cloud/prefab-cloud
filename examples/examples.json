@@ -125,6 +125,9 @@
               },
               {
                 "string": "control"
+              },
+              {
+                "string": "alpha-treatment"
               }
             ],
             "config_rows": [
@@ -170,7 +173,6 @@
                       "value": "example.com"
                     }
                   ]
-
                 }
               {
                 "value": {
