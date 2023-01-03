@@ -41,7 +41,43 @@ message ConfigValue {
     LimitDefinition limit_definition = 7;
     Segment segment = 8;
     LogLevel log_level = 9;
+
+    //Ideas for Sets, Lists & Lazy
+        string config_value = 10; // pointer
+    //Option 1
+    ConfigValueRepeat list = 11;
+    ConfigValueRepeat set = 12;
+
+
+    //Option 2
+    IntList int_list = 11;
+    IntSet int_set = 12;
+    StringList string_list = 13;
+    StringSet string_set = 14;
+
+    BigIntList big_int_list = 12;  // lazily loaded. supported incremental updates
   }
+}
+
+message ConfigValueRepeat {
+  repeated ConfigValue values = 1;
+}
+
+message IntList {
+  repeated int64 values = 1;
+}
+message IntSet {
+  repeated int64 values = 1;
+}
+message StringList {
+  repeated string values = 1;
+}
+message StringSet {
+  repeated string values = 1;
+}
+message BigIntList {
+  repeated int64 values = 1;
+  string url = 2; // url to fetch the list from
 }
 
 message WeightedValue {
