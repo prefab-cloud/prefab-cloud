@@ -58,6 +58,14 @@ message Configs {
   ConfigServicePointer config_service_pointer = 2;
 }
 
+enum ConfigType {
+  NOT_SET = 0; // proto null
+  CONFIG = 1;
+  FEATURE_FLAG = 2;
+  LOG_LEVEL = 3;
+  SEGMENT = 4;
+}
+
 message Config {
   int64 id = 1;
   int64 project_id = 2;
@@ -65,6 +73,7 @@ message Config {
   ChangedBy changed_by = 4;
   repeated ConfigRow rows = 5;
   repeated ConfigValue allowable_values = 6;
+  ConfigType config_type = 7;
 }
 
 message ChangedBy {
