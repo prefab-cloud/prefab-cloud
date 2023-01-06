@@ -41,9 +41,12 @@ message ConfigValue {
     LimitDefinition limit_definition = 7;
     Segment segment = 8;
     LogLevel log_level = 9;
+    StringList string_list = 10;
   }
 }
-
+message StringList  {
+  repeated string values = 1;
+}
 message WeightedValue {
   int32 weight = 1;  // out of 1000
   ConfigValue value = 2;
@@ -82,8 +85,9 @@ message ChangedBy {
 }
 
 message ConfigRow {
-  repeated ConditionalValue values = 1;
-  map<string, ConfigValue> properties = 2; // can store "activated"
+  optional int64 project_env_id = 1; // one row per project_env_id
+  repeated ConditionalValue values = 2;
+  map<string, ConfigValue> properties = 3; // can store "activated"
 }
 
 message ConditionalValue {
