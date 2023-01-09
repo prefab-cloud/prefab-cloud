@@ -151,7 +151,7 @@ message LimitRequest {
 }
 
 message Criterion {
-  enum CriteriaOperator {
+  enum CriterionOperator {
     NOT_SET = 0; // proto null
     LOOKUP_KEY_IN = 1;
     LOOKUP_KEY_NOT_IN = 2;
@@ -165,7 +165,7 @@ message Criterion {
     HIERARCHICAL_MATCH = 10;
   }
   string property_name = 1;
-  CriteriaOperator operator = 2;
+  CriterionOperator operator = 2;
   ConfigValue value_to_match = 3;
 }
 
