@@ -67,6 +67,7 @@ enum ConfigType {
   FEATURE_FLAG = 2;
   LOG_LEVEL = 3;
   SEGMENT = 4;
+  LIMIT_DEFINITION = 5;
 }
 
 message Config {
