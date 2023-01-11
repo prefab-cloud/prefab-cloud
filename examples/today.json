@@ -1,0 +1,62 @@
+[
+  {
+    "key": "basic-string",
+    "config_rows": [
+      {
+        "project_env_id": 118,
+        "value": {
+          "string": "staging-value"
+        }
+      },
+      {
+        "project_env_id": 118,
+        "namespace": "users.cron",
+        "value": {
+          "string": "namespaced-staging-value"
+        }
+      }
+    ]
+  },
+  {
+    "key": "feature-flag",
+    "feature_flag_variants": [
+      {
+        "string": "control"
+      },
+      {
+        "string": "treatment",
+        "description": "This is a description of the variant"
+      }
+    ],
+    "config_rows": [
+      {
+        "project_env_id": 118,
+        "value": {
+          "feature_flag": {
+            "active": true,
+            "inactive_variant_idx": 1,
+            "rules": [
+              {
+                "criteria": {
+                  "property": "email",
+                  "operator": "ENDS_WITH",
+                  "value": "example.com"
+                },
+                "variant_weights": [
+                  {
+                    "variant_idx": 0,
+                    "weight": 50
+                  },
+                  {
+                    "variant_idx": 1,
+                    "weight": 50
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    ]
+  }
+]
