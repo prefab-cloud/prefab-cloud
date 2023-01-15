@@ -78,6 +78,7 @@ message Config {
   repeated ConfigRow rows = 5;
   repeated ConfigValue allowable_values = 6;
   ConfigType config_type = 7;
+  optional int64 draftId = 8;
 }
 
 message ChangedBy {
