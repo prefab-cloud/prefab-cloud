@@ -39,7 +39,6 @@ message ConfigValue {
     bool bool = 5;
     WeightedValues weighted_values = 6;
     LimitDefinition limit_definition = 7;
-    Segment segment = 8;
     LogLevel log_level = 9;
     StringList string_list = 10;
   }
@@ -78,6 +77,7 @@ message Config {
   repeated ConfigRow rows = 5;
   repeated ConfigValue allowable_values = 6;
   ConfigType config_type = 7;
+  optional int64 draftId = 8;
 }
 
 message ChangedBy {
@@ -168,10 +168,6 @@ message Criterion {
   string property_name = 1;
   CriterionOperator operator = 2;
   ConfigValue value_to_match = 3;
-}
-
-message Segment {
-  repeated Criterion criteria = 1;
 }
 
 service ClientService {
