@@ -257,3 +257,28 @@ message IdBlockRequest {
   string sequence_name = 3;
   int64 size = 4;
 }
+
+message Loggers {
+  repeated Logger loggers = 1;
+  int64 start_at = 2;
+  int64 end_at = 3;
+  string instance_hash = 4; // random UUID generated on startup - represents the server so we can aggregate
+}
+
+message Logger {
+  string logger_name = 1;
+  optional int64 traces = 2;
+  optional int64 debugs = 3;
+  optional int64 infos = 4;
+  optional int64 warns = 5;
+  optional int64 errors = 6;
+}
+
+message LoggerReportResponse {
+
+}
+
+service LoggerReportingService {
+  rpc Send (Loggers) returns (LoggerReportResponse) {
+  };
+}
