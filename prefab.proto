@@ -272,6 +272,7 @@ message Logger {
   optional int64 infos = 4;
   optional int64 warns = 5;
   optional int64 errors = 6;
+  optional int64 fatals = 7;
 }
 
 message LoggerReportResponse {
