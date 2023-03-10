@@ -263,6 +263,7 @@ message Loggers {
   int64 start_at = 2;
   int64 end_at = 3;
   string instance_hash = 4; // random UUID generated on startup - represents the server so we can aggregate
+  optional string namespace = 5;
 }
 
 message Logger {
