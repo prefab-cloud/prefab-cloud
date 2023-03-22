@@ -41,7 +41,12 @@ message ConfigValue {
     LimitDefinition limit_definition = 7;
     LogLevel log_level = 9;
     StringList string_list = 10;
+    TimeRange time_range = 11;
   }
+}
+message TimeRange {
+  int64 start = 1;
+  int64 end = 2;
 }
 message StringList  {
   repeated string values = 1;
@@ -164,6 +169,7 @@ message Criterion {
     PROP_ENDS_WITH_ONE_OF = 8;
     PROP_DOES_NOT_END_WITH_ONE_OF = 9;
     HIERARCHICAL_MATCH = 10;
+    BETWEEN = 11;
   }
   string property_name = 1;
   CriterionOperator operator = 2;
