@@ -284,3 +284,18 @@ service LoggerReportingService {
   rpc Send (Loggers) returns (LoggerReportResponse) {
   };
 }
+
+// GreetingService for basic no-auth, no-resources required connectivity testing
+
+message GreetingMessage {
+  string greeting = 1;
+}
+
+message GreetingResponse {
+  string greeting = 1;
+  string response = 2;
+}
+
+service GreetingService {
+  rpc Greet(GreetingMessage) returns (GreetingResponse);
+}
