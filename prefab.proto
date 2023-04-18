@@ -53,6 +53,7 @@ message WeightedValue {
 
 message WeightedValues {
   repeated WeightedValue weighted_values = 1;
+  optional string hash_by_property_name = 2;
 }
 
 message Configs {
