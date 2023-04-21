@@ -5,7 +5,6 @@ package prefab;
 option java_package = "cloud.prefab.domain";
 option java_outer_classname = "Prefab";
 
-
 message ConfigServicePointer {
   int64 project_id = 1;
   int64 start_at_id = 2;

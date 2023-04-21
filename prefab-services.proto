@@ -4,8 +4,9 @@ import "prefab.proto";
 
 package prefab;
 
-option java_package = "cloud.prefab.domain";
-option java_outer_classname = "Prefab";
+option java_package = "cloud.prefab.config.services";
+option java_outer_classname = "PrefabService";
+option java_multiple_files = true;
 
 service RateLimitService {
   rpc LimitCheck (LimitRequest) returns (LimitResponse) {
