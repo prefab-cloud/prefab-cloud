@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+import "prefab.proto";
+
+package prefab;
+
+option java_package = "cloud.prefab.config.services";
+option java_outer_classname = "PrefabService";
+option java_multiple_files = true;
+
+service RateLimitService {
+  rpc LimitCheck (LimitRequest) returns (LimitResponse) {
+  };
+}
+
+service ConfigService {
+  rpc GetConfig (ConfigServicePointer) returns (stream Configs) {
+  };
+  rpc GetAllConfig (ConfigServicePointer) returns (Configs) {
+  };
+  rpc Upsert (Config) returns (CreationResponse) {
+  };
+}
+
+service IdService {
+  rpc GetBlock (IdBlockRequest) returns (IdBlock) {
+  };
+}
+
+
+service LoggerReportingService {
+  rpc Send (Loggers) returns (LoggerReportResponse) {
+  };
+}
+
+service ClientService {
+  rpc GetAll (Identity) returns (ConfigEvaluations) {
+  };
+}
+
+// GreetingService for basic no-auth, no-resources required connectivity testing
+
+message GreetingMessage {
+  string greeting = 1;
+}
+
+message GreetingResponse {
+  string greeting = 1;
+  string response = 2;
+}
+
+service GreetingService {
+  rpc Greet(GreetingMessage) returns (GreetingResponse);
+}
