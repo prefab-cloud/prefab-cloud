@@ -174,7 +174,15 @@ message LimitRequest {
   LimitDefinition.SafetyLevel safety_level = 6; // [default = L4_BEST_EFFORT];
 }
 
+// if the same Context type exists, last one wins
+message ContextSet {
+  repeated Context contexts = 1;
+}
 
+message Context {
+  optional string type = 1;
+  map<string, ConfigValue> values = 2;
+}
 
 message Identity {
   optional string lookup = 1;
