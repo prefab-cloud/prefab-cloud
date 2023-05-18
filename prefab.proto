@@ -22,8 +22,15 @@ message ConfigValue {
     LimitDefinition limit_definition = 7;
     LogLevel log_level = 9;
     StringList string_list = 10;
+    IntRange int_range = 11;
   }
 }
+
+message IntRange {
+  optional int64 start = 1; // if empty treat as Long.MIN_VALUE. Inclusive
+  optional int64 end = 2; // if empty treat as Long.MAX_VALUE. Exclusive
+}
+
 message StringList  {
   repeated string values = 1;
 }
@@ -105,6 +112,7 @@ message Criterion {
     PROP_ENDS_WITH_ONE_OF = 8;
     PROP_DOES_NOT_END_WITH_ONE_OF = 9;
     HIERARCHICAL_MATCH = 10;
+    IN_INT_RANGE = 11;
   }
   string property_name = 1;
   CriterionOperator operator = 2;
