@@ -275,13 +275,14 @@ message IdBlockRequest {
   int64 size = 4;
 }
 
-message ContextMeta {
+message ContextShape {
   string name = 1;
   map<string, int32> field_types = 2;
 }
 
-message ContextMetas {
-  repeated ContextMeta metas = 1;
+message ContextShapes {
+  repeated ContextShape shapes = 1;
+  optional string namespace = 2;
 }
 
 
