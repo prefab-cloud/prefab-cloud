@@ -285,5 +285,8 @@ message ContextShapes {
   optional string namespace = 2;
 }
 
-
+message EvaluatedKeys {
+  repeated string keys = 1;
+  optional string namespace = 2;
+}
 
