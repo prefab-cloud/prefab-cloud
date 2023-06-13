@@ -290,3 +290,10 @@ message EvaluatedKeys {
   optional string namespace = 2;
 }
 
+message EvaluatedConfig {
+  string key = 1;
+  int64 config_version = 2;
+  ConfigValue result = 3;
+  ContextSet context = 4;
+  int64 timestamp = 5;
+}
