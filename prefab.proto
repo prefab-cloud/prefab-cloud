@@ -202,6 +202,7 @@ message ClientConfigValue {
   optional string string = 2;
   optional double double = 3;
   optional bool bool = 4;
+  optional LogLevel log_level = 5;
 }
 message ConfigEvaluations {
   map<string, ClientConfigValue> values = 1;
