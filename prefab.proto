@@ -308,7 +308,9 @@ message ConfigEvaluationCounter {
   int64 config_id = 2;
   optional uint32 selected_index = 3; // index into the allowed-values list in the config
   ConfigValue selected_value = 4;
-  optional uint32 weighted_value_index = 5; // index into the weighted value array
+  optional uint32 config_row_index = 5;  // which row matched
+  optional uint32 conditional_value_index = 6;   // which ConditionalValue in the row matched?
+  optional uint32 weighted_value_index = 7; // index into the weighted value array
 }
 
 message ConfigEvaluationSummary {
