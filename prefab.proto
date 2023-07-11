@@ -334,6 +334,8 @@ message ConfigEvaluationSummaries {
 message TelemetryEvent {
   oneof payload {
     ConfigEvaluationSummaries summaries = 2;
+    ExampleContexts example_contexts = 3;
+    ClientStats client_stats = 4;
   }
 }
 
@@ -343,5 +345,23 @@ message TelemetryEvents {
 }
 
 message TelemetryEventsResponse {
-
+   bool success = 1;
 }
+
+message ExampleContexts {
+  repeated ExampleContext examples = 1;
+}
+
+message ExampleContext {
+  int64 timestamp = 1;
+  ContextSet contextSet = 2;
+}
+
+
+message ClientStats {
+  int64 start = 1;
+  int64 end = 2;
+  uint64 dropped_event_count = 3;
+}
+
+
