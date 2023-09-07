@@ -44,9 +44,15 @@ message WeightedValues {
   optional string hash_by_property_name = 2;
 }
 
+message ApiKeyMetadata {
+  optional string key_id = 1; // numeric currently, but making it string will be more flexible over time
+  optional int64 user_id = 2;
+}
+
 message Configs {
   repeated Config configs = 1;
   ConfigServicePointer config_service_pointer = 2;
+  ApiKeyMetadata apikey_metadata = 3;
 }
 
 enum ConfigType {
@@ -72,6 +78,7 @@ message Config {
 message ChangedBy {
   int64 user_id = 1;
   string email = 2;
+  string api_key_id = 3;
 }
 
 message ConfigRow {
@@ -206,6 +213,7 @@ message ClientConfigValue {
 }
 message ConfigEvaluations {
   map<string, ClientConfigValue> values = 1;
+  ApiKeyMetadata apikey_metadata = 2;
 }
 
 message LimitDefinition {
@@ -352,7 +360,7 @@ message TelemetryEvents {
 }
 
 message TelemetryEventsResponse {
-   bool success = 1;
+  bool success = 1;
 }
 
 message ExampleContexts {
@@ -370,5 +378,3 @@ message ClientStats {
   int64 end = 2;
   uint64 dropped_event_count = 3;
 }
-
-
