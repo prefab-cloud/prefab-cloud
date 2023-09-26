@@ -45,8 +45,9 @@ message WeightedValues {
 }
 
 message ApiKeyMetadata {
+  reserved 2;
   optional string key_id = 1; // numeric currently, but making it string will be more flexible over time
-  optional int64 user_id = 2;
+  optional string user_id = 3; //ditto
 }
 
 message Configs {
