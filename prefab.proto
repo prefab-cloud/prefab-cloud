@@ -52,7 +52,8 @@ message ApiKeyMetadata {
 message Configs {
   repeated Config configs = 1;
   ConfigServicePointer config_service_pointer = 2;
-  ApiKeyMetadata apikey_metadata = 3;
+  optional ApiKeyMetadata apikey_metadata = 3;
+  optional ContextSet default_context = 4;
 }
 
 enum ConfigType {
@@ -213,7 +214,8 @@ message ClientConfigValue {
 }
 message ConfigEvaluations {
   map<string, ClientConfigValue> values = 1;
-  ApiKeyMetadata apikey_metadata = 2;
+  optional ApiKeyMetadata apikey_metadata = 2;
+  optional ContextSet default_context = 3;
 }
 
 message LimitDefinition {
