@@ -64,6 +64,7 @@ enum ConfigType {
   LOG_LEVEL = 3;
   SEGMENT = 4;
   LIMIT_DEFINITION = 5;
+  DELETED = 6;
 }
 
 message Config {
