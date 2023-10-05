@@ -23,7 +23,23 @@ message ConfigValue {
     LogLevel log_level = 9;
     StringList string_list = 10;
     IntRange int_range = 11;
+    Provided provided = 12;
   }
+}
+
+message Provided {
+  optional ProvidedSource source = 1;
+  optional string lookup = 2; // MY_ENV_VAR
+  optional ConfigValue value = 3; // starts null, but can be set/cached from source
+}
+enum ProvidedSource {
+  PROVIDED_SOURCE_NOT_SET = 0;
+  ENV_VAR = 1;
+  // REDIS = 2;       // Store a StringList in Redis
+  // S3 = 3;          // Store a StringList in S3
+  // 1PASSWORD = 4;   // shell out to 1Password CLI
+  // YAML_URL = 5;    // fetch a StringList from a URL
+  // PREFAB_LAZY = 6; // fetch a StringList lazily from Prefab
 }
 
 message IntRange {
