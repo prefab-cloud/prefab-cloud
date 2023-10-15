@@ -29,8 +29,7 @@ message ConfigValue {
 
 message Provided {
   optional ProvidedSource source = 1;
-  optional string lookup = 2; // MY_ENV_VAR
-  optional ConfigValue value = 3; // starts null, but can be set/cached from source
+  optional string lookup = 2; // eg MY_ENV_VAR
 }
 enum ProvidedSource {
   PROVIDED_SOURCE_NOT_SET = 0;
