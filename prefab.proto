@@ -55,6 +55,7 @@ message Configs {
   ConfigServicePointer config_service_pointer = 2;
   optional ApiKeyMetadata apikey_metadata = 3;
   optional ContextSet default_context = 4;
+  optional bool keep_alive = 5;
 }
 
 enum ConfigType {
