@@ -208,13 +208,24 @@ message Identity {
   map<string, string> attributes = 2;
 }
 
-message ClientConfigValue {
-  optional int64 int = 1;
-  optional string string = 2;
-  optional double double = 3;
-  optional bool bool = 4;
-  optional LogLevel log_level = 5;
+message ConfigEvaluationMetaData {
+  optional int64 config_row_index = 1;
+  optional int64 conditional_value_index = 2;
+  optional int64 weighted_value_index = 3;
+  optional ConfigType type = 4;
 }
+
+message ClientConfigValue {
+  oneof type {
+    int64 int = 1;
+    string string = 2;
+    double double = 3;
+    bool bool = 4;
+    LogLevel log_level = 5;
+  }
+  optional ConfigEvaluationMetaData config_evaluation_metadata = 6;
+}
+
 message ConfigEvaluations {
   map<string, ClientConfigValue> values = 1;
   optional ApiKeyMetadata apikey_metadata = 2;
