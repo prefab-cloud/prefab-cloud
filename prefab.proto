@@ -37,11 +37,6 @@ message Provided {
 enum ProvidedSource {
   PROVIDED_SOURCE_NOT_SET = 0;
   ENV_VAR = 1;
-  // REDIS = 2;       // Store a StringList in Redis
-  // S3 = 3;          // Store a StringList in S3
-  // 1PASSWORD = 4;   // shell out to 1Password CLI
-  // YAML_URL = 5;    // fetch a StringList from a URL
-  // PREFAB_LAZY = 6; // fetch a StringList lazily from Prefab
 }
 
 message IntRange {
