@@ -23,7 +23,20 @@ message ConfigValue {
     LogLevel log_level = 9;
     StringList string_list = 10;
     IntRange int_range = 11;
+    Provided provided = 12;
   }
+  optional bool confidential = 13;   // don't log or telemetry this value
+  optional string decrypt_with = 14; // key name to decrypt with
+}
+
+message Provided {
+  optional ProvidedSource source = 1;
+  optional string lookup = 2; // eg MY_ENV_VAR
+}
+
+enum ProvidedSource {
+  PROVIDED_SOURCE_NOT_SET = 0;
+  ENV_VAR = 1;
 }
 
 message IntRange {
