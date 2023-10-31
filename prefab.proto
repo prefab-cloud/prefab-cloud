@@ -90,6 +90,19 @@ message Config {
   repeated ConfigValue allowable_values = 6;
   ConfigType config_type = 7;
   optional int64 draftId = 8;
+  ValueType value_type = 9;
+
+  enum ValueType {
+    NOT_SET_VALUE_TYPE = 0; // proto null
+    STRING = 1;
+    BYTES = 2;
+    DOUBLE = 3;
+    BOOL = 4;
+    LIMIT_DEFINITION = 5;
+    LOG_LEVEL = 6;
+    STRING_LIST = 7;
+    INT_RANGE = 11;
+  }
 }
 
 message ChangedBy {
