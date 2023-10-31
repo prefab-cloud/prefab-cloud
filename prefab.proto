@@ -94,13 +94,14 @@ message Config {
 
   enum ValueType {
     NOT_SET_VALUE_TYPE = 0; // proto null
-    STRING = 1;
-    BYTES = 2;
-    DOUBLE = 3;
-    BOOL = 4;
-    LIMIT_DEFINITION = 5;
-    LOG_LEVEL = 6;
-    STRING_LIST = 7;
+    INT = 1;
+    STRING = 2;
+    BYTES = 3;
+    DOUBLE = 4;
+    BOOL = 5;
+    LIMIT_DEFINITION = 7;
+    LOG_LEVEL = 9;
+    STRING_LIST = 10;
     INT_RANGE = 11;
   }
 }
