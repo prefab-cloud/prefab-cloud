@@ -395,6 +395,7 @@ message TelemetryEvent {
     ExampleContexts example_contexts = 3;
     ClientStats client_stats = 4;
     LoggersTelemetryEvent loggers = 5;
+    ContextShapes context_shapes = 6;
   }
 }
 
