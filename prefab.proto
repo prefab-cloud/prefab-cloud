@@ -89,7 +89,7 @@ message Config {
   repeated ConfigRow rows = 5;
   repeated ConfigValue allowable_values = 6;
   ConfigType config_type = 7;
-  optional int64 draftId = 8;
+  optional int64 draft_id = 8;
   ValueType value_type = 9;
 
   enum ValueType {
