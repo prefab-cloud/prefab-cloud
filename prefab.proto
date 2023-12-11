@@ -241,6 +241,7 @@ message ConfigEvaluationMetaData {
   optional int64 weighted_value_index = 3;
   optional ConfigType type = 4;
   optional int64 id = 5;
+  optional Config.ValueType value_type = 6;
 }
 
 message ClientConfigValue {
@@ -250,6 +251,8 @@ message ClientConfigValue {
     double double = 3;
     bool bool = 4;
     LogLevel log_level = 5;
+    StringList string_list = 7;
+    IntRange int_range = 8;
   }
   optional ConfigEvaluationMetaData config_evaluation_metadata = 6;
 }
