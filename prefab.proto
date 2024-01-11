@@ -91,6 +91,7 @@ message Config {
   ConfigType config_type = 7;
   optional int64 draft_id = 8;
   ValueType value_type = 9;
+  bool send_to_client_sdk = 10; // default value of a boolean in proto3 is false
 
   enum ValueType {
     NOT_SET_VALUE_TYPE = 0; // proto null
