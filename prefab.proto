@@ -4,6 +4,7 @@ package prefab;
 
 option java_package = "cloud.prefab.domain";
 option java_outer_classname = "Prefab";
+option go_package = "github.com/prefab-cloud/prefab-cloud-go/proto";
 
 message ConfigServicePointer {
   int64 project_id = 1;
