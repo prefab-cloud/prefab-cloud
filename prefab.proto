@@ -267,8 +267,7 @@ message ClientConfigValue {
 
 message ClientDuration {
   int64 seconds = 1;  // the actual time is the sum of these, so 1.5 seconds would be seconds = 1, nanos = 500_000_000
-  int64 nanos = 2;
-
+  int32 nanos = 2;
 }
 
 message ConfigEvaluations {
