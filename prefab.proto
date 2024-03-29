@@ -110,6 +110,7 @@ message Config {
     LOG_LEVEL = 9;
     STRING_LIST = 10;
     INT_RANGE = 11;
+    DURATION = 12;
   }
 }
 
