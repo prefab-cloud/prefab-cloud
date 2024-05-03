@@ -269,6 +269,7 @@ message ClientConfigValue {
     StringList string_list = 7;
     IntRange int_range = 8;
     ClientDuration duration = 9;
+    Json json = 10;
   }
   optional ConfigEvaluationMetaData config_evaluation_metadata = 6;
 }
@@ -276,6 +277,7 @@ message ClientConfigValue {
 message ClientDuration {
   int64 seconds = 1;  // the actual time is the sum of these, so 1.5 seconds would be seconds = 1, nanos = 500_000_000
   int32 nanos = 2;
+  string definition = 3;
 }
 
 message ConfigEvaluations {
