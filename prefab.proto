@@ -27,6 +27,7 @@ message ConfigValue {
     Provided provided = 12;
     IsoDuration duration = 15;
     Json json = 16;
+    Schema schema = 17;
   }
   optional bool confidential = 13;   // don't log or telemetry this value
   optional string decrypt_with = 14; // key name to decrypt with
@@ -91,6 +92,7 @@ enum ConfigType {
   SEGMENT = 4;
   LIMIT_DEFINITION = 5;
   DELETED = 6;
+  SCHEMA = 7;
 }
 
 message Config {
@@ -104,6 +106,7 @@ message Config {
   optional int64 draft_id = 8;
   ValueType value_type = 9;
   bool send_to_client_sdk = 10; // default value of a boolean in proto3 is false
+  optional string schema_key = 11;
 
   enum ValueType {
     NOT_SET_VALUE_TYPE = 0; // proto null
@@ -463,4 +466,15 @@ message ClientStats {
   int64 start = 1;
   int64 end = 2;
   uint64 dropped_event_count = 3;
+}
+
+
+message Schema {
+  enum SchemaType {
+    UNKNOWN = 0;
+    ZOD = 1;
+    JSON_SCHEMA = 2;
+  }
+  string schema = 1;
+  SchemaType schema_type = 2;
 }
