@@ -128,6 +128,7 @@ message ChangedBy {
   int64 user_id = 1;
   string email = 2;
   string api_key_id = 3;
+  string user_identity = 4;
 }
 
 message ConfigRow {
