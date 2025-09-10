@@ -31,6 +31,8 @@ message ConfigValue {
   }
   optional bool confidential = 13;   // don't log or telemetry this value
   optional string decrypt_with = 14; // key name to decrypt with
+  optional string name = 15; // used for naming the allowable values for feature flags
+  optional string description = 16; // used for naming the allowable values for feature flags
 }
 
 message Json {
