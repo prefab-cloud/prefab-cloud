@@ -123,6 +123,7 @@ message Config {
     INT_RANGE = 11;
     DURATION = 12;
     JSON = 13;
+    LOG_LEVEL_V2 = 14;
   }
 }
 
